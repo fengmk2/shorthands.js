@@ -3,6 +3,25 @@ var debug = require('debug')('normalize-shorthands')
 var is = require('path-is')
 
 module.exports = function (remotes) {
+  var hostname = remotes.hostname
+
+  // create a map lookup of remote.name => remote
+  var map = Object.create(null)
+  if (remotes.names) {
+    // normalize proxy
+    remotes.names.forEach(function (name) {
+      var remote = remotes[name]
+      remote.aliases.forEach(function (alias) {
+        map[alias] = remote
+      })
+    })
+  } else if (Array.isArray(remotes.remotes)) {
+    // proxy.json
+    remotes.remotes.forEach(function (remote) {
+      map[remote.name] = remote
+    })
+  }
+
   return function shorthand(uri) {
     if (is.url(uri)) return null
     if (is.data(uri)) return null
@@ -20,7 +39,7 @@ module.exports = function (remotes) {
       debug('got npm shorthand for: %s', uri)
       // (npm:)project@version
       // npm: here is optional
-      remote = remotes.npm
+      remote = map.npm
       project = m[1]
       version = m[2]
       uri = uri.replace(m[0], '')
@@ -28,7 +47,7 @@ module.exports = function (remotes) {
       debug('got npm org shorthand for: %s', uri)
       // (npm:)@org/project@version
       // npm: here is optional
-      remote = remotes.npm
+      remote = map.npm
       user = m[1]
       project = m[2]
       version = m[3]
@@ -37,7 +56,7 @@ module.exports = function (remotes) {
       debug('got github shorthand for: %s', uri)
       // user/project@version, defaulting to github
       // the @ is required here to make things unambiguous
-      remote = remotes.github
+      remote = map.github
       user = m[1]
       project = m[2]
       version = m[3]
@@ -45,7 +64,7 @@ module.exports = function (remotes) {
     } else if (m = /^(\w+)\:/.exec(uri)) {
       debug('defaulting to regular resolution for: %s', uri)
       // from now on, <shorthand>: is required
-      remote = getByShorthand(m[1])
+      remote = map[m[1]]
       if (!remote) {
         debug('could not resolve remote for: %s', uri)
         return null
@@ -87,19 +106,11 @@ module.exports = function (remotes) {
       if (!/\.js$/.test(file)) file += '.js'
     }
 
-    return 'https://' + remotes.hostname
+    return 'https://' + hostname
       + '/' + remote.name
       + '/' + (user || '-')
       + '/' + project
       + '/' + (version || '*')
       + '/' + (file || 'index.js')
-  }
-
-  function getByShorthand(str) {
-    var names = remotes.names
-    for (var i = 0; i < names.length; i++) {
-      var remote = remotes[names[i]]
-      if (~remote.aliases.indexOf(str)) return remote
-    }
   }
 }
