@@ -18,7 +18,9 @@ module.exports = function (remotes) {
   } else if (Array.isArray(remotes.remotes)) {
     // proxy.json
     remotes.remotes.forEach(function (remote) {
-      map[remote.name] = remote
+      remote.aliases.forEach(function (alias) {
+        map[alias] = remote
+      })
     })
   }
 
