@@ -1,8 +1,13 @@
 
 var assert = require('assert')
+var remotes = require('normalize-proxy/lib/remotes')
 
-var shorthand = require('./')(require('normalize-proxy/lib/remotes'))
+var shorthand = require('./')(remotes)
 
+var npm = remotes.npm
+var gh = remotes.github
+
+// shorthand -> longhand
 ;[
   // npm shorthands
   ['emitter@1', '/npm/-/emitter/1/index.js'],
@@ -50,6 +55,28 @@ var shorthand = require('./')(require('normalize-proxy/lib/remotes'))
     shorthand(pair[0]),
     'https://nlz.io' + pair[1],
     pair[0] + ' !== ' + pair[1] + ', got ' + shorthand(pair[0]))
+})
+
+// fragments -> shorthand
+;[
+  // npm
+  [[npm, '-', 'emitter', '*'], 'emitter@*'],
+  [[npm, '-', 'emitter', '*', 'index.js'], 'emitter@*'],
+  [[npm, '-', 'emitter', '1'], 'emitter@1'],
+  [[npm, '-', 'emitter', '1', 'index.js'], 'emitter@1'],
+
+  // github
+  [[gh, 'component', 'emitter', '*'], 'component/emitter@*'],
+  [[gh, 'component', 'emitter', '1'], 'component/emitter@1'],
+
+  // filename simplification
+  [[gh, 'component', 'emitter', '1', 'file.js'], 'component/emitter@1/file'],
+  [[gh, 'component', 'emitter', '1', 'lib/index.js'], 'component/emitter@1/lib/'],
+].forEach(function (pair) {
+  assert.equal(
+    shorthand.js.apply(null, pair[0]),
+    pair[1]
+  )
 })
 
 console.log('All tests pass!')

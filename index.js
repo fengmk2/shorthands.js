@@ -24,7 +24,10 @@ module.exports = function (remotes) {
     })
   }
 
-  return function shorthand(uri) {
+  shorthand.js = js
+  return shorthand
+
+  function shorthand(uri) {
     if (is.url(uri)) return null
     if (is.data(uri)) return null
     if (is.absolute(uri)) return null
@@ -114,5 +117,21 @@ module.exports = function (remotes) {
       + '/' + project
       + '/' + (version || '*')
       + '/' + (file || 'index.js')
+  }
+
+  function js(remote, user, project, version, filename) {
+    var name = remote.name
+    var named = name !== 'npm' && name !== 'github'
+
+    var val = ''
+    if (named)
+      val += (remote.shorthand || name) + ':'
+    if (user && user !== '-')
+      val += (name === 'npm' ? '@' : '') + user + '/'
+    val += project + '@' + (version || '*')
+    if (!filename || filename === 'index.js') return val
+    return val + '/' + filename
+      .replace(/\/index\.js$/, '/')
+      .replace(/\.js$/, '')
   }
 }
