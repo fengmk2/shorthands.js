@@ -57,6 +57,19 @@ var gh = remotes.github
     pair[0] + ' !== ' + pair[1] + ', got ' + shorthand(pair[0]))
 })
 
+// other extensions
+;[
+  ['component/emitter@1', '/github/component/emitter/1/index.css'],
+  ['component/emitter@1/', '/github/component/emitter/1/index.css'],
+  ['component/emitter@1/index', '/github/component/emitter/1/index.css'],
+  ['component/emitter@1/index.css', '/github/component/emitter/1/index.css'],
+].forEach(function (pair) {
+  assert.equal(
+    shorthand(pair[0], 'css'),
+    'https://nlz.io' + pair[1],
+    pair[0] + ' !== ' + pair[1] + ', got ' + shorthand(pair[0], 'css'))
+})
+
 // fragments -> shorthand
 ;[
   // npm
@@ -78,16 +91,5 @@ var gh = remotes.github
     pair[1]
   )
 })
-
-// other extensions
-assert.equal(
-  shorthand('component/emitter@1', 'css'),
-  'https://nlz.io/github/component/emitter/1/index.css')
-assert.equal(
-  shorthand('component/emitter@1/', 'css'),
-  'https://nlz.io/github/component/emitter/1/index.css')
-assert.equal(
-  shorthand('component/emitter@1/index', 'css'),
-  'https://nlz.io/github/component/emitter/1/index.css')
 
 console.log('All tests pass!')

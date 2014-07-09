@@ -107,10 +107,10 @@ module.exports = function (remotes) {
 
     // by this time, everything but the filename should be stripped
     if (file = uri.replace(/^\//, '')) {
-      // index.js support
+      // index support
       if (file.slice(-1) === '/') file += 'index.' + ext
       // must always be this extension!
-      if (file.slice(-3) !== '.' + ext) file += '.' + ext
+      if (file.slice(-1 - ext.length) !== '.' + ext) file += '.' + ext
     }
 
     return 'https://' + hostname
