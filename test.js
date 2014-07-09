@@ -79,4 +79,15 @@ var gh = remotes.github
   )
 })
 
+// other extensions
+assert.equal(
+  shorthand('component/emitter@1', 'css'),
+  'https://nlz.io/github/component/emitter/1/index.css')
+assert.equal(
+  shorthand('component/emitter@1/', 'css'),
+  'https://nlz.io/github/component/emitter/1/index.css')
+assert.equal(
+  shorthand('component/emitter@1/index', 'css'),
+  'https://nlz.io/github/component/emitter/1/index.css')
+
 console.log('All tests pass!')

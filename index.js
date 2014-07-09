@@ -27,11 +27,13 @@ module.exports = function (remotes) {
   shorthand.js = js
   return shorthand
 
-  function shorthand(uri) {
+  function shorthand(uri, ext) {
     if (is.url(uri)) return null
     if (is.data(uri)) return null
     if (is.absolute(uri)) return null
     if (/^\.+\//.test(uri)) return null
+
+    ext = ext || 'js'
 
     var m
     var remote
@@ -106,9 +108,9 @@ module.exports = function (remotes) {
     // by this time, everything but the filename should be stripped
     if (file = uri.replace(/^\//, '')) {
       // index.js support
-      if (file.slice(-1) === '/') file += 'index.js'
-      // must always be a .js file!
-      if (!/\.js$/.test(file)) file += '.js'
+      if (file.slice(-1) === '/') file += 'index.' + ext
+      // must always be this extension!
+      if (file.slice(-3) !== '.' + ext) file += '.' + ext
     }
 
     return 'https://' + hostname
@@ -116,7 +118,7 @@ module.exports = function (remotes) {
       + '/' + (user || '-')
       + '/' + project
       + '/' + (version || '*')
-      + '/' + (file || 'index.js')
+      + '/' + (file || ('index.' + ext))
   }
 
   function js(remote, user, project, version, filename) {
