@@ -2,7 +2,7 @@
 var assert = require('assert')
 var remotes = require('normalize-proxy/lib/remotes')
 
-var shorthand = require('./')(remotes)
+var shorthand = require('..')(remotes)
 
 var npm = remotes.npm
 var gh = remotes.github

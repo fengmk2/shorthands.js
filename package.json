@@ -15,9 +15,13 @@
     "path-is": "1"
   },
   "devDependencies": {
+    "istanbul-harmony": "0",
     "normalize-proxy": "*"
   },
   "scripts": {
-    "test": "node --harmony-generators test.js"
-  }
+    "test": "node --harmony-generators test",
+    "test-cov": "node --harmony-generators ./node_modules/.bin/istanbul cover node -- --harmony-generators test",
+    "test-travis": "node --harmony-generators ./node_modules/.bin/istanbul cover node -- --harmony-generators test"
+  },
+  "files": ["index.js"]
 }
