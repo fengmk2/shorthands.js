@@ -1,7 +1,7 @@
 {
   "name": "normalize-shorthands",
   "description": "shorthand URIs for normalize",
-  "version": "0.1.5",
+  "version": "1.0.0",
   "author": {
     "name": "Jonathan Ong",
     "email": "me@jongleberry.com",
@@ -23,5 +23,7 @@
     "test-cov": "node --harmony-generators ./node_modules/.bin/istanbul cover node -- --harmony-generators test",
     "test-travis": "node --harmony-generators ./node_modules/.bin/istanbul cover node -- --harmony-generators test"
   },
-  "files": ["index.js"]
+  "files": [
+    "index.js"
+  ]
 }
