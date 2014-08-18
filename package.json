@@ -20,8 +20,8 @@
   },
   "scripts": {
     "test": "node --harmony-generators test",
-    "test-cov": "node --harmony-generators ./node_modules/.bin/istanbul cover node -- --harmony-generators test",
-    "test-travis": "node --harmony-generators ./node_modules/.bin/istanbul cover node -- --harmony-generators test"
+    "test-cov": "node --harmony-generators ./node_modules/.bin/istanbul cover test",
+    "test-travis": "node --harmony-generators ./node_modules/.bin/istanbul cover test"
   },
   "files": [
     "index.js"
